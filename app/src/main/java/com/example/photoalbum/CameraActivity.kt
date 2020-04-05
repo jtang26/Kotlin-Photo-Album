@@ -6,21 +6,38 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.camera_layout.*
 
 class CameraActivity: AppCompatActivity() {
+
+    private lateinit var captureButton: Button
+    private lateinit var privateButton: Button
+    private lateinit var publicButton: Button
+    private lateinit var photoView: ImageView
+
+
 
     //Code taken from "Camera Studio"
 
     val REQUEST_CAMERA_PERMISSIONS = 1;
     val IMAGE_CAPTURE_CODE = 2;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.camera_layout)
 
-        btnTakePicture.setOnClickListener {
+        //Set Views
+        captureButton = btn_capture_photo
+        privateButton = btn_private
+        publicButton = btn_public
+        photoView = image
+
+        captureButton.setOnClickListener {
 
             var permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
 
@@ -32,6 +49,8 @@ class CameraActivity: AppCompatActivity() {
                 startActivityForResult(cIntent, IMAGE_CAPTURE_CODE)
             }
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -39,16 +58,7 @@ class CameraActivity: AppCompatActivity() {
         if(requestCode == IMAGE_CAPTURE_CODE) {
             if(resultCode == Activity.RESULT_OK) {
                 val bitmap = data!!.extras!!["data"] as Bitmap
-                capturedImage.setImageBitmap(bitmap)
-
-                val fireImage = FirebaseVisionImage.fromBitmap(bitmap)
-
-                val options = FirebaseVisionFaceDetectorOptions.Builder()
-                    .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
-                    .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-                    .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-                    .build()
-
+                photoView.setImageBitmap(bitmap)
 
             }
         }
