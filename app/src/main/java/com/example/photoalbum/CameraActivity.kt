@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.camera_layout.*
 
 class CameraActivity: AppCompatActivity() {
@@ -19,6 +20,7 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var privateButton: Button
     private lateinit var publicButton: Button
     private lateinit var photoView: ImageView
+    private lateinit var storage: FirebaseStorage
 
 
 
@@ -30,6 +32,11 @@ class CameraActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.camera_layout)
+
+        storage = FirebaseStorage.getInstance()
+        var storageRef = storage.reference
+        var publicImageRef = storageRef.child("albums/public")
+        var privateImageRef = storageRef.child("albums/private")
 
         //Set Views
         captureButton = btn_capture_photo
