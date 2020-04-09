@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var picButton: Button
+    private lateinit var createButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         picButton = btn_camera
+        createButton = btn_creator
 
         auth = FirebaseAuth.getInstance()
 
@@ -33,6 +35,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
+        createButton.setOnClickListener(){
+            val intent = Intent(this, AlbumCreatorActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
 
 

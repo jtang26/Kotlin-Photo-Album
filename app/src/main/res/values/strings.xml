@@ -3,4 +3,10 @@
     <string name="take_picture">Take Picture</string>
     <string name="private_album">Private</string>
     <string name="public_album"> Public </string>
+    <string name="album_name"> Album Name </string>
+    <string name="album_description"> Album Description </string>
+    <string name="create_button"> Create </string>
+    <string name="switch_label">Private or Public?</string>
+    <string name="photo_album">Create A Photo Album</string>
+
 </resources>
