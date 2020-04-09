@@ -13,6 +13,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.camera_layout.*
+import androidx.annotation.NonNull
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.storage.UploadTask
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.storage.StorageReference
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.net.Uri
+import android.view.View
+import java.io.ByteArrayOutputStream
+import java.io.File
+
 
 class CameraActivity: AppCompatActivity() {
 
@@ -21,8 +35,7 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var publicButton: Button
     private lateinit var photoView: ImageView
     private lateinit var storage: FirebaseStorage
-
-
+    private lateinit var storageRef: StorageReference
 
     //Code taken from "Camera Studio"
 
@@ -34,7 +47,7 @@ class CameraActivity: AppCompatActivity() {
         setContentView(R.layout.camera_layout)
 
         storage = FirebaseStorage.getInstance()
-        var storageRef = storage.reference
+        storageRef = storage.reference
         var publicImageRef = storageRef.child("albums/public")
         var privateImageRef = storageRef.child("albums/private")
 
@@ -66,6 +79,49 @@ class CameraActivity: AppCompatActivity() {
             if(resultCode == Activity.RESULT_OK) {
                 val bitmap = data!!.extras!!["data"] as Bitmap
                 photoView.setImageBitmap(bitmap)
+                privateButton.visibility = View.VISIBLE
+                publicButton.visibility = View.VISIBLE
+                val currentTimestamp = System.currentTimeMillis()
+                var picName = ""
+                picName += currentTimestamp.toString()
+                picName += ".jpg"
+                privateButton.setOnClickListener() {
+                    var picRef = storageRef.child("Albums/Private/" + picName)
+                    // Get the data from an ImageView as bytes
+                    photoView.isDrawingCacheEnabled = true
+                    photoView.buildDrawingCache()
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    val data = baos.toByteArray()
+                    println("before upload")
+                    var uploadTask = picRef.putBytes(data)
+                    uploadTask.addOnFailureListener {
+                        println("failure")
+                        // Handle unsuccessful uploads
+                    }.addOnSuccessListener {
+                        println("Success")
+                        // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                        // ...
+                    }
+                }
+                publicButton.setOnClickListener() {
+                    var publicPicRef = storageRef.child("Albums/Public/" + picName)
+                    photoView.isDrawingCacheEnabled = true
+                    photoView.buildDrawingCache()
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    val data = baos.toByteArray()
+                    println("before upload")
+                    var uploadTask = publicPicRef.putBytes(data)
+                    uploadTask.addOnFailureListener {
+                        println("failure")
+                        // Handle unsuccessful uploads
+                    }.addOnSuccessListener {
+                        println("Success")
+                        // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                        // ...
+                    }
+                }
 
             }
         }
