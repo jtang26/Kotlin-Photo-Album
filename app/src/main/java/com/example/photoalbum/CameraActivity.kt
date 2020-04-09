@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.Uri
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -37,7 +38,9 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
 
-    //Code taken from "Camera Studio"
+    val userId: String = FirebaseAuth.getInstance().currentUser!!.uid
+
+    //Code cited from "Camera Studio"
 
     val REQUEST_CAMERA_PERMISSIONS = 1;
     val IMAGE_CAPTURE_CODE = 2;
@@ -86,7 +89,7 @@ class CameraActivity: AppCompatActivity() {
                 picName += currentTimestamp.toString()
                 picName += ".jpg"
                 privateButton.setOnClickListener() {
-                    var picRef = storageRef.child("Albums/Private/" + picName)
+                    var picRef = storageRef.child("Albums/"+userId+ "/"+"Private/" + picName)
                     // Get the data from an ImageView as bytes
                     photoView.isDrawingCacheEnabled = true
                     photoView.buildDrawingCache()
@@ -105,7 +108,7 @@ class CameraActivity: AppCompatActivity() {
                     }
                 }
                 publicButton.setOnClickListener() {
-                    var publicPicRef = storageRef.child("Albums/Public/" + picName)
+                    var publicPicRef = storageRef.child("Albums/"+userId+ "/"+"Public/" + picName)
                     photoView.isDrawingCacheEnabled = true
                     photoView.buildDrawingCache()
                     val baos = ByteArrayOutputStream()
