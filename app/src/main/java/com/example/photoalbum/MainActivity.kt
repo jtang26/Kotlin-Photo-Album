@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var picButton: Button
     private lateinit var createButton: Button
+    private lateinit var logoutButton: Button
+    private lateinit var userListButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         picButton = btn_camera
         createButton = btn_creator
+        logoutButton = btn_logout
+        userListButton = btn_userlist
 
         auth = FirebaseAuth.getInstance()
 
@@ -40,9 +44,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        btn_logout.setOnClickListener() {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
-
-
+        userListButton.setOnClickListener() {
+            val intent = Intent(this, UserListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
 
     }

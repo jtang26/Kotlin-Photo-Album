@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.photoalbum.Data.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -47,6 +48,8 @@ class SignupActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
                                 .show()
+                            val user = User(email, username)
+                            db.collection("users").document(auth.currentUser!!.uid).set(user)
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("username", username)
                             startActivity(intent)
