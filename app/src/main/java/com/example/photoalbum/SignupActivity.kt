@@ -48,7 +48,8 @@ class SignupActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
                                 .show()
-                            val user = User(email, username)
+                            var userID = auth.currentUser!!.uid
+                            val user = User(email, username, userID)
                             db.collection("users").document(auth.currentUser!!.uid).set(user)
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("username", username)

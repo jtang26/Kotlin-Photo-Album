@@ -1,4 +1,4 @@
-package com.example.cse438.cse438_assignment4
+package com.example.photoalbum
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
