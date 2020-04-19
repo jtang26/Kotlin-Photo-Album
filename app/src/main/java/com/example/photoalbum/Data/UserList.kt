@@ -15,12 +15,12 @@ data class Album (
     val albumDescription: String? = null,
     val isPublic: Boolean? = null,
     //Stores links to Firebase Storage for each picture
-    val pictures: List<String> = emptyList(),
+    val pictures: ArrayList<String> = ArrayList<String>(),
     //Stores userids or usernames that can view album
-    val allowedUserList: List<String> = emptyList(),
+    val allowedUserList: ArrayList<String> = ArrayList<String>(),
     //Stores arraylist of userids or usernames that are mods
-    val isModList: List<String> = emptyList(),
-    val comments: List<Comments> = emptyList()
+    val isModList: ArrayList<String> = ArrayList<String>(),
+    val comments:ArrayList<Comments> = ArrayList<Comments>()
 
 )
 

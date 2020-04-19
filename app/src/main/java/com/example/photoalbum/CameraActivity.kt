@@ -25,6 +25,7 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.Uri
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -113,12 +114,14 @@ class CameraActivity: AppCompatActivity() {
                 var picName = ""
                 picName += currentTimestamp.toString()
                 picName += ".jpg"
+
                 privateButton.setOnClickListener() {
                     publicAlbum = false
                     //set instance of firestore
                     db = FirebaseFirestore.getInstance()
 
 
+                    //Query to get list of albums matching users selection
                     val document: Query =
                         db.collection("albums").whereEqualTo("public", publicAlbum)
                     document.get().addOnSuccessListener { documentSnapshot ->
@@ -132,8 +135,6 @@ class CameraActivity: AppCompatActivity() {
                         recyclerView.adapter = adapter
                         recyclerView.layoutManager = LinearLayoutManager(this)
                         recyclerView.addItemDecoration(decorator)
-
-
                     }
 
                     album_recycler_view.addOnItemTouchListener(
@@ -146,6 +147,8 @@ class CameraActivity: AppCompatActivity() {
                                     println("album clicked, position: " + position)
 
                                     val album: Album = albums.get(position)
+                                    var pictures: MutableList<String> = album.pictures
+
                                     var picRef = storageRef.child("albums/"+ email+ "/"+ album.albumName +"/" + picName)
                                     // Get the data from an ImageView as bytes
                                     photoView.isDrawingCacheEnabled = true
@@ -161,7 +164,23 @@ class CameraActivity: AppCompatActivity() {
                                     }.addOnSuccessListener {
                                         println("Success")
                                         // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                                        // ...
+                                        //get download URi
+                                     val result=  it.task.snapshot.metadata!!.reference!!.downloadUrl
+                                        result.addOnSuccessListener {
+                                            var imageLink = it.toString()
+                                            pictures.add(imageLink)
+                                        }
+                                    }
+                                    if (album.albumName!=null){
+                                        //Query album to get string of pics
+                                        val albumRef = db.collection("albums").document(album.albumName)
+
+                                        //Update album pic List
+                                        albumRef
+                                            .update("pictures", pictures)
+                                            .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
+                                                Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
+                                            .addOnFailureListener { e -> Log.w( "Error updating document", e) }
                                     }
                                 }
 
@@ -199,11 +218,12 @@ class CameraActivity: AppCompatActivity() {
                             this,
                             album_recycler_view,
                             object : RecyclerItemClickListener.OnItemClickListener {
-
                                 override fun onItemClick(view: View, position: Int) {
                                     println("album clicked, position: " + position)
 
                                     val album: Album = albums.get(position)
+                                    var pictures: MutableList<String> = album.pictures
+
                                     var picRef = storageRef.child("albums/"+ email+ "/"+ album.albumName +"/" + picName)
                                     // Get the data from an ImageView as bytes
                                     photoView.isDrawingCacheEnabled = true
@@ -219,10 +239,25 @@ class CameraActivity: AppCompatActivity() {
                                     }.addOnSuccessListener {
                                         println("Success")
                                         // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                                        // ...
+                                        //get download URi
+                                        val result=  it.task.snapshot.metadata!!.reference!!.downloadUrl
+                                        result.addOnSuccessListener {
+                                            var imageLink = it.toString()
+                                            pictures.add(imageLink)
+                                        }
+                                    }
+                                    if (album.albumName!=null){
+                                        //Query album to get string of pics
+                                        val albumRef = db.collection("albums").document(album.albumName)
+
+                                        //Update album pic List
+                                        albumRef
+                                            .update("pictures", pictures)
+                                            .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
+                                                Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
+                                            .addOnFailureListener { e -> Log.w( "Error updating document", e) }
                                     }
                                 }
-
                                 override fun onItemLongClick(view: View?, position: Int) {
 
                                 }
