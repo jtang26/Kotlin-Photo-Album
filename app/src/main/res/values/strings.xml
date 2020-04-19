@@ -8,5 +8,7 @@
     <string name="create_button"> Create </string>
     <string name="switch_label">Private or Public?</string>
     <string name="photo_album">Create A Photo Album</string>
+    <string name="public_album_label">Public Albums</string>
+    <string name="private_album_label">Private Albums</string>
 
 </resources>

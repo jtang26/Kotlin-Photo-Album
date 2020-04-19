@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var createButton: Button
     private lateinit var logoutButton: Button
     private lateinit var userListButton: Button
+    private lateinit var publicAlbum: Button
+    private lateinit var privateAlbum: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         createButton = btn_creator
         logoutButton = btn_logout
         userListButton = btn_userlist
+        publicAlbum = btn_public_album
+        privateAlbum = btn_private_album
 
         auth = FirebaseAuth.getInstance()
 
@@ -38,10 +42,12 @@ class MainActivity : AppCompatActivity() {
         picButton.setOnClickListener(){
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
+            finish()
         }
         createButton.setOnClickListener(){
             val intent = Intent(this, AlbumCreatorActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         btn_logout.setOnClickListener() {
@@ -53,6 +59,18 @@ class MainActivity : AppCompatActivity() {
 
         userListButton.setOnClickListener() {
             val intent = Intent(this, UserListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        publicAlbum.setOnClickListener() {
+            val intent = Intent(this, PublicAlbumListActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        privateAlbum.setOnClickListener() {
+            val intent = Intent(this, PrivateAlbumListActivity::class.java)
             startActivity(intent)
             finish()
         }

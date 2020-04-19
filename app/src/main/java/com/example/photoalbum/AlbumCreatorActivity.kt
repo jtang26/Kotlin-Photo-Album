@@ -24,7 +24,6 @@ class AlbumCreatorActivity: AppCompatActivity() {
     lateinit var albumDescription: EditText
     lateinit var albumType: Switch
     lateinit var createAlbumButton: Button
-    lateinit var type:String
     //creat instance of FirebaseFirestore
     lateinit var db : FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -71,7 +70,6 @@ class AlbumCreatorActivity: AppCompatActivity() {
 
                 var albumName = name
                 var albumDesc = description
-                var albumType = type
                 var owner = auth.currentUser!!.email
                 val pictures = ArrayList<String>()
                 //Stores userids or usernames that can view album
@@ -80,7 +78,7 @@ class AlbumCreatorActivity: AppCompatActivity() {
                 val isModList = ArrayList<String>()
                 val comments = ArrayList<Comments>()
                 var newAlbum = Album(owner, albumName, null, albumDesc, typePublic, pictures, allowedUserList, isModList,comments)
-                db.collection("Albums").document(albumName)
+                db.collection("albums").document(albumName)
                     .set(newAlbum)
 
                     .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
@@ -92,6 +90,12 @@ class AlbumCreatorActivity: AppCompatActivity() {
                         Log.d("AlbumCreatorActivity", "Failed to insert data!")
                     })
             }
+        }
+
+        back_button.setOnClickListener(){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
 

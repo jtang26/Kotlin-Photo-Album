@@ -7,6 +7,7 @@ data class User (
     val albumLink: String? = null
 )
 
+
 data class Album (
     val owner: String? = null,
     val albumName: String? = null,
@@ -14,14 +15,19 @@ data class Album (
     val albumDescription: String? = null,
     val isPublic: Boolean? = null,
     //Stores links to Firebase Storage for each picture
-    val pictures: ArrayList<String>,
+    val pictures: List<String> = emptyList(),
     //Stores userids or usernames that can view album
-    val allowedUserList: ArrayList<String>,
+    val allowedUserList: List<String> = emptyList(),
     //Stores arraylist of userids or usernames that are mods
-    val isModList: ArrayList<String>,
-    val comments: ArrayList<Comments>
+    val isModList: List<String> = emptyList(),
+    val comments: List<Comments> = emptyList()
 
 )
+
+
+
+
+
 
 data class Comments (
     val commentBody: String? = null,
