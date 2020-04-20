@@ -28,6 +28,7 @@ class AlbumCreatorActivity: AppCompatActivity() {
     //creat instance of FirebaseFirestore
     lateinit var db : FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    lateinit var allowedUserListed: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,7 @@ class AlbumCreatorActivity: AppCompatActivity() {
         albumDescription = album_description
         albumType = switch1
         createAlbumButton = createButton
+        var allowedUserListed = ArrayList<String>()
 
         var typePublic = true
 
@@ -72,32 +74,31 @@ class AlbumCreatorActivity: AppCompatActivity() {
                 var albumName = name
                 var albumDesc = description
                 var owner = auth.currentUser!!.email
-                val pictures = ArrayList<String>()
-                //Stores userids or usernames that can view album
-                val allowedUserList =  ArrayList<String>()
-                db.collection("users").document(auth.currentUser!!.uid)
-                    .get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        var data = documentSnapshot.toObject(User::class.java)
-                        var currentUserUsername = data!!.username
-                        allowedUserList.add(currentUserUsername as String)
-                    }
-
-                //Stores arraylist of userids or usernames that are mods
                 val isModList = ArrayList<String>()
                 val comments = ArrayList<Comments>()
-                var newAlbum = Album(albumDesc, albumName, null, allowedUserList, comments, isModList, owner, pictures, typePublic)
-                db.collection("albums").document(albumName)
-                    .set(newAlbum)
+                val pictures = ArrayList<String>()
+                //Stores userids or usernames that can view album
+                db.collection("users").document(auth.currentUser!!.uid)
+                    .get().addOnSuccessListener { documentSnapshot ->
+                        var data = documentSnapshot.toObject(User::class.java)
+                        var currentUserUsername = data!!.username
+                        allowedUserListed.add(currentUserUsername as String)
+                        var newAlbum = Album(albumDesc, albumName, null, allowedUserListed, comments, isModList, owner, pictures, typePublic)
+                        db.collection("albums").document(albumName)
+                            .set(newAlbum)
 
-                    .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
-                       Toast.makeText(this,"Album Created!",Toast.LENGTH_SHORT).show()
-                        }
-                    .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error writing document", e) }
+                            .addOnSuccessListener { Log.d(ContentValues.TAG, "DocumentSnapshot successfully written!")
+                                Toast.makeText(this,"Album Created!",Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e -> Log.w(ContentValues.TAG, "Error writing document", e) }
 
-                    .addOnFailureListener(OnFailureListener { e ->
-                        Log.d("AlbumCreatorActivity", "Failed to insert data!")
-                    })
+                            .addOnFailureListener(OnFailureListener { e ->
+                                Log.d("AlbumCreatorActivity", "Failed to insert data!")
+                            })
+                    }
+                println("userlist")
+                println(allowedUserListed)
+                //Stores arraylist of userids or usernames that are mods
             }
         }
 
