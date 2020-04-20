@@ -123,7 +123,7 @@ class CameraActivity: AppCompatActivity() {
 
                     //Query to get list of albums matching users selection
                     val document: Query =
-                        db.collection("albums").whereEqualTo("public", publicAlbum)
+                        db.collection("albums").whereEqualTo("isPublic", publicAlbum)
                     document.get().addOnSuccessListener { documentSnapshot ->
                         var albumList = documentSnapshot.toObjects(Album::class.java)
                         albums = albumList
@@ -198,7 +198,7 @@ class CameraActivity: AppCompatActivity() {
 
 
                     val document: Query =
-                        db.collection("albums").whereEqualTo("public", publicAlbum)
+                        db.collection("albums").whereEqualTo("isPublic", publicAlbum)
                     document.get().addOnSuccessListener { documentSnapshot ->
                         var albumList = documentSnapshot.toObjects(Album::class.java)
                         albums = albumList

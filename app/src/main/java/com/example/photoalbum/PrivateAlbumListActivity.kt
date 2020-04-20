@@ -36,7 +36,7 @@ class PrivateAlbumListActivity:AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
 
-        val document: Query = db.collection("albums").whereEqualTo("public",false)
+        val document: Query = db.collection("albums").whereEqualTo("isPublic",false)
             .whereEqualTo("owner", auth.currentUser!!.email)
         document.get().addOnSuccessListener { documentSnapshot ->
             var albumList = documentSnapshot.toObjects(Album::class.java)

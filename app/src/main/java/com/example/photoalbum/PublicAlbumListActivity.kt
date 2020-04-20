@@ -44,7 +44,7 @@ class PublicAlbumListActivity: AppCompatActivity() {
 
 
 
-       val document: Query = db.collection("albums").whereEqualTo("public",true)
+       val document: Query = db.collection("albums").whereEqualTo("isPublic",true)
            .whereArrayContains("allowedUserList", usernamed)
         document.get().addOnSuccessListener { documentSnapshot ->
             var albumList = documentSnapshot.toObjects(Album::class.java)

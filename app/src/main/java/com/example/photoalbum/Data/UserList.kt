@@ -20,6 +20,7 @@ data class Album (
     val isModList: ArrayList<String> = ArrayList<String>(),
     val owner: String? = null,
     val pictures: ArrayList<String> = ArrayList<String>(),
+    //Source for @Field : https://stackoverflow.com/questions/46406376/kotlin-class-does-not-get-its-boolean-value-from-firebase
     @field:JvmField val isPublic: Boolean? = null
 
 )
