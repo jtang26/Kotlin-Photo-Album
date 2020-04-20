@@ -40,25 +40,25 @@ class PublicAlbumListActivity: AppCompatActivity() {
         doc.get().addOnSuccessListener { docSnapshot ->
             var userData = docSnapshot.toObjects(User::class.java)
             usernamed = userData[0].username as String
+            val document: Query = db.collection("albums").whereEqualTo("isPublic",true)
+                .whereArrayContains("allowedUserList", usernamed)
+            document.get().addOnSuccessListener { documentSnapshot ->
+                var albumList = documentSnapshot.toObjects(Album::class.java)
+                albums = albumList
+                // set recycler view
+                val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
+                val recyclerView: RecyclerView = public_album_recycler_view
+                val adapter = AlbumListAdapter(albumList)
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.addItemDecoration(decorator)
+                Log.d("PublicAlbumListActivity", "Public Album List = " + albumList)
+
+            }
         }
 
 
 
-       val document: Query = db.collection("albums").whereEqualTo("isPublic",true)
-           .whereArrayContains("allowedUserList", usernamed)
-        document.get().addOnSuccessListener { documentSnapshot ->
-            var albumList = documentSnapshot.toObjects(Album::class.java)
-            albums = albumList
-            // set recycler view
-            val decorator = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
-            val recyclerView: RecyclerView = public_album_recycler_view
-            val adapter = AlbumListAdapter(albumList)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.addItemDecoration(decorator)
-            Log.d("PublicAlbumListActivity", "Public Album List = " + albumList)
-
-        }
 
 
 

@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.photoalbum.Adapter.AlbumListAdapter
 import com.example.photoalbum.Adapter.RecyclerItemClickListener
 import com.example.photoalbum.Data.Album
+import com.example.photoalbum.Data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -51,6 +52,8 @@ class CameraActivity: AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var albums: MutableList<Album>
     lateinit var backButton: Button
+    private lateinit var username1: String
+    lateinit var auth: FirebaseAuth
 
     val userId: String = FirebaseAuth.getInstance().currentUser!!.uid
     val email: String? = FirebaseAuth.getInstance().currentUser!!.email
@@ -67,9 +70,10 @@ class CameraActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.camera_layout)
 
-
+        auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
+
 
 
         //Set Views
@@ -78,6 +82,7 @@ class CameraActivity: AppCompatActivity() {
         publicButton = btn_public
         photoView = image
         backButton = back_button_1
+        username1 = ""
 
         captureButton.setOnClickListener {
 
@@ -122,19 +127,23 @@ class CameraActivity: AppCompatActivity() {
 
 
                     //Query to get list of albums matching users selection
-                    val document: Query =
-                        db.collection("albums").whereEqualTo("isPublic", publicAlbum)
-                    document.get().addOnSuccessListener { documentSnapshot ->
-                        var albumList = documentSnapshot.toObjects(Album::class.java)
-                        albums = albumList
-                        // set recycler view
-                        val decorator =
-                            DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
-                        val recyclerView: RecyclerView = album_recycler_view
-                        val adapter = AlbumListAdapter(albumList)
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(this)
-                        recyclerView.addItemDecoration(decorator)
+                        val document: Query =
+                            db.collection("albums").whereEqualTo("isPublic", publicAlbum)
+                                .whereEqualTo("owner", auth.currentUser!!.email)
+                        document.get().addOnSuccessListener { documentSnapshot ->
+                            var albumList = documentSnapshot.toObjects(Album::class.java)
+                            albums = albumList
+                            // set recycler view
+                            val decorator =
+                                DividerItemDecoration(
+                                    applicationContext,
+                                    LinearLayoutManager.VERTICAL
+                                )
+                            val recyclerView: RecyclerView = album_recycler_view
+                            val adapter = AlbumListAdapter(albumList)
+                            recyclerView.adapter = adapter
+                            recyclerView.layoutManager = LinearLayoutManager(this)
+                            recyclerView.addItemDecoration(decorator)
                     }
 
                     album_recycler_view.addOnItemTouchListener(
@@ -196,21 +205,29 @@ class CameraActivity: AppCompatActivity() {
                     //set instance of firestore
                     db = FirebaseFirestore.getInstance()
 
+                    val doc: Query = db.collection("users").whereEqualTo("userID", auth.currentUser!!.uid)
+                    doc.get().addOnSuccessListener { docSnapshot ->
+                        var userData = docSnapshot.toObjects(User::class.java)
+                        username1 = userData[0].username as String
+                        val document: Query =
+                            db.collection("albums").whereEqualTo("isPublic", publicAlbum)
+                                .whereArrayContains("allowedUserList", username1)
+                        document.get().addOnSuccessListener { documentSnapshot ->
+                            var albumList = documentSnapshot.toObjects(Album::class.java)
+                            albums = albumList
+                            // set recycler view
+                            val decorator =
+                                DividerItemDecoration(
+                                    applicationContext,
+                                    LinearLayoutManager.VERTICAL
+                                )
+                            val recyclerView: RecyclerView = album_recycler_view
+                            val adapter = AlbumListAdapter(albumList)
+                            recyclerView.adapter = adapter
+                            recyclerView.layoutManager = LinearLayoutManager(this)
+                            recyclerView.addItemDecoration(decorator)
 
-                    val document: Query =
-                        db.collection("albums").whereEqualTo("isPublic", publicAlbum)
-                    document.get().addOnSuccessListener { documentSnapshot ->
-                        var albumList = documentSnapshot.toObjects(Album::class.java)
-                        albums = albumList
-                        // set recycler view
-                        val decorator =
-                            DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
-                        val recyclerView: RecyclerView = album_recycler_view
-                        val adapter = AlbumListAdapter(albumList)
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(this)
-                        recyclerView.addItemDecoration(decorator)
-
+                        }
                     }
 
                     album_recycler_view.addOnItemTouchListener(
