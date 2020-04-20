@@ -20,7 +20,10 @@ import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
+import com.example.photoalbum.Adapter.RecyclerItemClickListener
 
 
 class AlbumViewActivity:AppCompatActivity() {
@@ -29,6 +32,7 @@ class AlbumViewActivity:AppCompatActivity() {
     lateinit var albumTitle: TextView
     lateinit var album: Album
     lateinit var backButton: Button
+    lateinit var deleteButton: Button
     lateinit var picList: ArrayList<String>
     private lateinit var userListButton: Button
     lateinit var albumNamed: String
@@ -44,6 +48,7 @@ class AlbumViewActivity:AppCompatActivity() {
         picList = ArrayList<String>()
         userListButton = btn_userlist
         albumNamed = ""
+        deleteButton = btn_delete
 
         //set instance of firestore
         db = FirebaseFirestore.getInstance()
@@ -59,6 +64,7 @@ class AlbumViewActivity:AppCompatActivity() {
             var albumList = documentSnapshot.toObjects(Album::class.java)
             album = albumList[0]
             picList = album.pictures
+
             val recyclerView: RecyclerView = grid_view
             val adapter = PhotoAlbumAdapter(picList as ArrayList<String>)
             val numOfColumns = 2
@@ -87,7 +93,65 @@ class AlbumViewActivity:AppCompatActivity() {
             finish()
         }
 
+        grid_view.addOnItemTouchListener(RecyclerItemClickListener(this, grid_view, object : RecyclerItemClickListener.OnItemClickListener {
 
+            override fun onItemClick(view: View, position: Int) {
+                println("photo clicked, position: " + position )
+
+                val photoUrl: String = picList.get(position)
+                val photoPosition = position
+
+
+                val intent = Intent(baseContext,PhotoViewActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("url",photoUrl)
+                bundle.putInt("position",photoPosition)
+                bundle.putString("album_name",albumName)
+                intent.putExtras(bundle)
+
+                startActivity(intent)
+            }
+            override fun onItemLongClick(view: View?, position: Int) {
+
+            }
+        }))
+
+
+
+        deleteButton.setOnClickListener(){
+            val builder = AlertDialog.Builder(this)
+
+            builder.setMessage("Are you sure you want to delete this photo album?")
+
+            builder.setPositiveButton("Yes") { dialog, which ->
+
+                val albumRef = db.collection("albums").document(albumName)
+                albumRef
+                    .delete()
+                    .addOnSuccessListener { Toast.makeText(applicationContext, "Album deleted!", Toast.LENGTH_SHORT).show()
+                    }
+
+
+                if (album.isPublic==true){
+                    val intent = Intent(this, PublicAlbumListActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                else{
+                    val intent = Intent(this, PrivateAlbumListActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
+            }
+            builder.setNegativeButton("No") { dialog, which ->
+                dialog.cancel()
+            }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.setCancelable(false)
+            dialog.show()
+        }
 
 
 

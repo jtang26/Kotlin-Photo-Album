@@ -28,7 +28,7 @@ class PhotoViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
         imgUrl = url
 
-        Picasso.get().load(imgUrl).into(photoPic);
+        Picasso.get().load(imgUrl).into(photoPic)
     }
 
 

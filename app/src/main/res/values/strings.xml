@@ -11,5 +11,6 @@
     <string name="public_album_label">Public Albums</string>
     <string name="private_album_label">Private Albums</string>
     <string name="back">Back</string>
+    <string name="delete">Delete</string>
 
 </resources>
