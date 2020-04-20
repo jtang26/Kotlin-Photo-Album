@@ -25,11 +25,14 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         inviteButton.setOnClickListener() {
 
         }
+//        if (event.username == owner) {
+//
+//        }
     }
 }
 
 
-class UserListAdapter(private val list: MutableList<User>?) :
+class UserListAdapter(private val list: MutableList<User>?, private val owner: String) :
     RecyclerView.Adapter<UserListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         val inflater = LayoutInflater.from(parent.context)

@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.photoalbum.Data.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userListButton: Button
     private lateinit var publicAlbum: Button
     private lateinit var privateAlbum: Button
-
+    public lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         privateAlbum = btn_private_album
 
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
@@ -58,9 +61,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         userListButton.setOnClickListener() {
-            val intent = Intent(this, UserListActivity::class.java)
-            startActivity(intent)
-            finish()
+            val id = auth.currentUser!!.uid
+            var username: String?
+            val usernameDoc = db.collection("users").whereEqualTo(id, true)
+            usernameDoc.get().addOnSuccessListener { documentSnapshot ->
+                var dataID = documentSnapshot.toObjects(User::class.java)
+                username = dataID[0].username
+                val intent = Intent(this, UserListActivity::class.java)
+                intent.putExtra("username", username)
+                startActivity(intent)
+                finish()
+            }
         }
 
         publicAlbum.setOnClickListener() {
