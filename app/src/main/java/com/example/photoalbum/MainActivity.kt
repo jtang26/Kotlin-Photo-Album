@@ -63,10 +63,13 @@ class MainActivity : AppCompatActivity() {
         userListButton.setOnClickListener() {
             val id = auth.currentUser!!.uid
             var username: String?
+            username = ""
             val usernameDoc = db.collection("users").whereEqualTo(id, true)
             usernameDoc.get().addOnSuccessListener { documentSnapshot ->
                 var dataID = documentSnapshot.toObjects(User::class.java)
-                username = dataID[0].username
+                if(dataID.size!=0) {
+                    username = dataID[0].username
+                }
                 val intent = Intent(this, UserListActivity::class.java)
                 intent.putExtra("username", username)
                 startActivity(intent)

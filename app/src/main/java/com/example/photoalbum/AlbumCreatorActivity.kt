@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.photoalbum.Data.Album
 import com.example.photoalbum.Data.Comments
+import com.example.photoalbum.Data.User
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -73,7 +74,15 @@ class AlbumCreatorActivity: AppCompatActivity() {
                 var owner = auth.currentUser!!.email
                 val pictures = ArrayList<String>()
                 //Stores userids or usernames that can view album
-                val allowedUserList=  ArrayList<String>()
+                val allowedUserList =  ArrayList<String>()
+                db.collection("users").document(auth.currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        var data = documentSnapshot.toObject(User::class.java)
+                        var currentUserUsername = data!!.username
+                        allowedUserList.add(currentUserUsername as String)
+                    }
+
                 //Stores arraylist of userids or usernames that are mods
                 val isModList = ArrayList<String>()
                 val comments = ArrayList<Comments>()

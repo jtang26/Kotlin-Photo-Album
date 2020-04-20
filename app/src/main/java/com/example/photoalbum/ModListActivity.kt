@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoalbum.Adapter.ModListAdapter
+import com.example.photoalbum.Data.Album
 import com.example.photoalbum.Data.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -24,8 +25,8 @@ class ModListActivity : AppCompatActivity() {
 
         val document = db.collection("album").orderBy("allowedUserList", Query.Direction.ASCENDING)
         document.get().addOnSuccessListener { documentSnapshot ->
-            var data = documentSnapshot.toObjects(User::class.java)
-            val adapter = ModListAdapter(data, username)
+            var data = documentSnapshot.toObjects(Album::class.java)
+            val adapter = ModListAdapter(data)
            mod_recycler_view.adapter = adapter
             mod_recycler_view.layoutManager = LinearLayoutManager(this)
         }

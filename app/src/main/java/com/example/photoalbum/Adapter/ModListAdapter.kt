@@ -29,7 +29,7 @@ class ModListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         var positionPlus = position + 1
         username.text = positionPlus.toString() + ".  " + event.allowedUserList + ":  "
         modButton.setOnClickListener() {
-            
+
         }
         demodButton.setOnClickListener() {
 
@@ -45,7 +45,7 @@ class ModListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 }
 
 
-class ModListAdapter(private val list: MutableList<Album>?, private val owner: String) :
+class ModListAdapter(private val list: MutableList<Album>?) :
     RecyclerView.Adapter<ModListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
