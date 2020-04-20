@@ -86,7 +86,7 @@ class AlbumCreatorActivity: AppCompatActivity() {
                 //Stores arraylist of userids or usernames that are mods
                 val isModList = ArrayList<String>()
                 val comments = ArrayList<Comments>()
-                var newAlbum = Album(owner, albumName, null, albumDesc, typePublic, pictures, allowedUserList, isModList,comments)
+                var newAlbum = Album(albumDesc, albumName, null, allowedUserList, comments, isModList, owner, pictures, typePublic)
                 db.collection("albums").document(albumName)
                     .set(newAlbum)
 

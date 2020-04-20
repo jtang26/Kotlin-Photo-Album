@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var picButton: Button
     private lateinit var createButton: Button
     private lateinit var logoutButton: Button
-    private lateinit var userListButton: Button
     private lateinit var publicAlbum: Button
     private lateinit var privateAlbum: Button
     public lateinit var db: FirebaseFirestore
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         picButton = btn_camera
         createButton = btn_creator
         logoutButton = btn_logout
-        userListButton = btn_userlist
         publicAlbum = btn_public_album
         privateAlbum = btn_private_album
 
@@ -60,22 +58,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        userListButton.setOnClickListener() {
-            val id = auth.currentUser!!.uid
-            var username: String?
-            username = ""
-            val usernameDoc = db.collection("users").whereEqualTo(id, true)
-            usernameDoc.get().addOnSuccessListener { documentSnapshot ->
-                var dataID = documentSnapshot.toObjects(User::class.java)
-                if(dataID.size!=0) {
-                    username = dataID[0].username
-                }
-                val intent = Intent(this, UserListActivity::class.java)
-                intent.putExtra("username", username)
-                startActivity(intent)
-                finish()
-            }
-        }
 
         publicAlbum.setOnClickListener() {
             val intent = Intent(this, PublicAlbumListActivity::class.java)

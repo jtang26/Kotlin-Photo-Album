@@ -17,13 +17,13 @@ class UserListActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_list_layout)
         val data = intent.extras
-        val username = data!!.getString("username").toString()
+        val albumName = data!!.getString("albumNamed").toString()
         db = FirebaseFirestore.getInstance()
 
         val document = db.collection("users").orderBy("username", Query.Direction.ASCENDING)
         document.get().addOnSuccessListener { documentSnapshot ->
             var data = documentSnapshot.toObjects(User::class.java)
-            val adapter = UserListAdapter(data, username)
+            val adapter = UserListAdapter(data, albumName)
             leader_recycler_view.adapter = adapter
             leader_recycler_view.layoutManager = LinearLayoutManager(this)
         }

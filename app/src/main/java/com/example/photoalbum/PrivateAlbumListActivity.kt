@@ -11,15 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.photoalbum.Adapter.AlbumListAdapter
 import com.example.photoalbum.Adapter.RecyclerItemClickListener
 import com.example.photoalbum.Data.Album
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.private_album_list_layout.*
+import kotlinx.android.synthetic.main.signup.view.*
 
 
 class PrivateAlbumListActivity:AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
     lateinit var albums: MutableList<Album>
+    lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +33,11 @@ class PrivateAlbumListActivity:AppCompatActivity() {
 
         //set instance of firestore
         db = FirebaseFirestore.getInstance()
-
+        auth = FirebaseAuth.getInstance()
 
 
         val document: Query = db.collection("albums").whereEqualTo("public",false)
+            .whereEqualTo("owner", auth.currentUser!!.email)
         document.get().addOnSuccessListener { documentSnapshot ->
             var albumList = documentSnapshot.toObjects(Album::class.java)
             albums = albumList

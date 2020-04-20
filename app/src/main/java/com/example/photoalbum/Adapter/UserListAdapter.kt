@@ -23,17 +23,17 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         inviteButton = itemView.findViewById(R.id.invite_button)
     }
 
-    fun bind(event :User, position: Int) {
+    fun bind(event :User, position: Int, albumName: String) {
         var positionPlus = position + 1
         username.text = positionPlus.toString() + ".  " + event.username + ":  "
         inviteButton.setOnClickListener() {
-            val document = db.collection("albums").document(auth.currentUser!!.uid)
+            val document = db.collection("albums").document(albumName)
             document.get()
                 .addOnSuccessListener { documentSnapshot ->
                     var data = documentSnapshot.toObject(Album::class.java)
                     var currentUserList = data!!.allowedUserList
                     currentUserList.add(event.username.toString())
-                    val documentUpdate = db.collection("albums").document(auth.currentUser!!.uid)
+                    val documentUpdate = db.collection("albums").document(albumName)
                     documentUpdate.update("allowedUserList", currentUserList)
                         .addOnSuccessListener { documentSnapshot ->
                             Toast.makeText(inviteButton.context, "Successfully updated!", Toast.LENGTH_LONG)
@@ -47,7 +47,7 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 }
 
 
-class UserListAdapter(private val list: MutableList<User>?, private val owner: String) :
+class UserListAdapter(private val list: MutableList<User>?, private val albumName: String) :
     RecyclerView.Adapter<UserListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -60,7 +60,7 @@ class UserListAdapter(private val list: MutableList<User>?, private val owner: S
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         val event: User = list!!.get(position)
 
-        holder.bind(event, position)
+        holder.bind(event, position, albumName)
     }
 
     //set the count
