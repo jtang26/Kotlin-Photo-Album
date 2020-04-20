@@ -62,10 +62,7 @@
         android:layout_marginLeft="136dp"
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
-        android:showText="true"
-        android:text="@string/switch_label"
-        android:textOn="@string/private_album"
-        android:textOff="@string/public_album"
+        android:text="@string/public_album"
         app:layout_constraintTop_toBottomOf="@+id/album_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

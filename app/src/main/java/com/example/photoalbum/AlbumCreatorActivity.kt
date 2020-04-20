@@ -49,14 +49,22 @@ class AlbumCreatorActivity: AppCompatActivity() {
 
         var typePublic = true
 
+        var public: String = "Public"
+        var private: String = "Private"
+
+
+
 
         albumType.setOnCheckedChangeListener({ _ , isChecked ->
             typePublic = false
+            albumType.text = private
             if (isChecked!=true){
                 typePublic = true
+                albumType.text = public
             }
 
         })
+
 
 
 

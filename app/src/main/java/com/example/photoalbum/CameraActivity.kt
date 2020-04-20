@@ -39,6 +39,8 @@ import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.private_album_list_layout.*
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 
 class CameraActivity: AppCompatActivity() {
@@ -175,6 +177,11 @@ class CameraActivity: AppCompatActivity() {
                                         // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                                         //get download URi
                                      val result=  it.task.snapshot.metadata!!.reference!!.downloadUrl
+                                      val time =  it.task.snapshot.metadata!!.creationTimeMillis
+                                        val pattern = "yyyy-MM-dd";
+                                        val format = SimpleDateFormat(pattern)
+                                        val date = format.format(time)
+                                        Log.d("CameraActivity","date picture taken: " + date)
                                         result.addOnSuccessListener {
                                             var imageLink = it.toString()
                                             pictures.add(imageLink)
