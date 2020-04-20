@@ -169,18 +169,18 @@ class CameraActivity: AppCompatActivity() {
                                         result.addOnSuccessListener {
                                             var imageLink = it.toString()
                                             pictures.add(imageLink)
-                                        }
-                                    }
-                                    if (album.albumName!=null){
-                                        //Query album to get string of pics
-                                        val albumRef = db.collection("albums").document(album.albumName)
+                                            if (album.albumName!=null){
+                                                //Query album to get string of pics
+                                                val albumRef = db.collection("albums").document(album.albumName)
 
-                                        //Update album pic List
-                                        albumRef
-                                            .update("pictures", pictures)
-                                            .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
-                                                Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
-                                            .addOnFailureListener { e -> Log.w( "Error updating document", e) }
+                                                //Update album pic List
+                                                albumRef
+                                                    .update("pictures", pictures)
+                                                    .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
+                                                        Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
+                                                    .addOnFailureListener { e -> Log.w( "Error updating document", e) }
+                                            }
+                                        }
                                     }
                                 }
 
@@ -244,19 +244,19 @@ class CameraActivity: AppCompatActivity() {
                                         result.addOnSuccessListener {
                                             var imageLink = it.toString()
                                             pictures.add(imageLink)
+                                            if (album.albumName!=null){
+                                                //Query album to get string of pics
+                                                val albumRef = db.collection("albums").document(album.albumName)
+                                                //Update album pic List
+                                                albumRef
+                                                    .update("pictures", pictures)
+                                                    .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
+                                                        Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
+                                                    .addOnFailureListener { e -> Log.w( "Error updating document", e) }
+                                            }
                                         }
                                     }
-                                    if (album.albumName!=null){
-                                        //Query album to get string of pics
-                                        val albumRef = db.collection("albums").document(album.albumName)
 
-                                        //Update album pic List
-                                        albumRef
-                                            .update("pictures", pictures)
-                                            .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
-                                                Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
-                                            .addOnFailureListener { e -> Log.w( "Error updating document", e) }
-                                    }
                                 }
                                 override fun onItemLongClick(view: View?, position: Int) {
 
