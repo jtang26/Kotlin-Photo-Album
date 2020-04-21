@@ -35,7 +35,7 @@ class ModListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
         }
         banButton.setOnClickListener() {
-
+            
         }
 
 //        if (event.username == owner) {

@@ -29,7 +29,8 @@ class UserListActivity: AppCompatActivity() {
         }
 
         back_button.setOnClickListener() {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, AlbumViewActivity::class.java)
+            intent.putExtra("name", albumName)
             startActivity(intent)
             finish()
         }

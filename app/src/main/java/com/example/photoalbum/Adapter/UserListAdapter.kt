@@ -32,14 +32,21 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
                 .addOnSuccessListener { documentSnapshot ->
                     var data = documentSnapshot.toObject(Album::class.java)
                     var currentUserList = data!!.allowedUserList
-                    currentUserList.add(event.username.toString())
-                    val documentUpdate = db.collection("albums").document(albumName)
-                    documentUpdate.update("allowedUserList", currentUserList)
-                        .addOnSuccessListener { documentSnapshot ->
-                            Toast.makeText(inviteButton.context, "Successfully updated!", Toast.LENGTH_LONG)
-                        }
+                    if(!currentUserList.contains(event.username.toString())) {
+                        currentUserList.add(event.username.toString())
+                        val documentUpdate = db.collection("albums").document(albumName)
+                        documentUpdate.update("allowedUserList", currentUserList)
+                            .addOnSuccessListener { documentSnapshot ->
+                                Toast.makeText(
+                                    inviteButton.context,
+                                    "Successfully updated!",
+                                    Toast.LENGTH_LONG
+                                )
+                            }
+                    }else{
+                        Toast.makeText(inviteButton.context, "User has already been invited to the album!", Toast.LENGTH_LONG)
+                    }
                 }
-
 
         }
 

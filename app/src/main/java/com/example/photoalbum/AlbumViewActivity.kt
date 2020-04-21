@@ -35,6 +35,7 @@ class AlbumViewActivity:AppCompatActivity() {
     lateinit var deleteButton: Button
     lateinit var picList: ArrayList<String>
     private lateinit var userListButton: Button
+    private lateinit var commentsButton: Button
     lateinit var albumNamed: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class AlbumViewActivity:AppCompatActivity() {
         userListButton = btn_userlist
         albumNamed = ""
         deleteButton = btn_delete
+        commentsButton = btn_comments
 
         //set instance of firestore
         db = FirebaseFirestore.getInstance()
@@ -77,7 +79,7 @@ class AlbumViewActivity:AppCompatActivity() {
                 var thisAlbum = documentSnap.toObjects(Album::class.java)
                 if(thisAlbum[0].isPublic==false) {
                     userListButton.visibility = View.INVISIBLE
-
+                    commentsButton.visibility = View.INVISIBLE
                 }
             }
         }
@@ -88,6 +90,13 @@ class AlbumViewActivity:AppCompatActivity() {
 
         userListButton.setOnClickListener() {
             val intent = Intent(this, UserListActivity::class.java)
+            intent.putExtra("albumNamed", albumNamed)
+            startActivity(intent)
+            finish()
+        }
+
+        commentsButton.setOnClickListener() {
+            val intent = Intent(this, CommentsActivity::class.java)
             intent.putExtra("albumNamed", albumNamed)
             startActivity(intent)
             finish()
