@@ -24,6 +24,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import com.example.photoalbum.Adapter.RecyclerItemClickListener
+import com.example.photoalbum.Data.User
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AlbumViewActivity:AppCompatActivity() {
@@ -36,7 +38,9 @@ class AlbumViewActivity:AppCompatActivity() {
     lateinit var picList: ArrayList<String>
     private lateinit var userListButton: Button
     private lateinit var commentsButton: Button
+    private lateinit var toModButton: Button
     lateinit var albumNamed: String
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +55,8 @@ class AlbumViewActivity:AppCompatActivity() {
         albumNamed = ""
         deleteButton = btn_delete
         commentsButton = btn_comments
+        toModButton = to_mod_button
+        auth = FirebaseAuth.getInstance()
 
         //set instance of firestore
         db = FirebaseFirestore.getInstance()
@@ -85,6 +91,13 @@ class AlbumViewActivity:AppCompatActivity() {
         }
 
         backButton.setOnClickListener(){
+            finish()
+        }
+
+        toModButton.setOnClickListener() {
+            val intent = Intent(this, ModListActivity::class.java)
+            intent.putExtra("albumNamed", albumNamed)
+            startActivity(intent)
             finish()
         }
 
@@ -125,6 +138,20 @@ class AlbumViewActivity:AppCompatActivity() {
             }
         }))
 
+        db.collection("users").document(auth.currentUser!!.uid)
+            .get().addOnSuccessListener { documentSnapshot ->
+                var data = documentSnapshot.toObject(User::class.java)
+                var username = data!!.username
+                db.collection("albums").document(albumName)
+                    .get().addOnSuccessListener { docuSnap ->
+                        var albumData = docuSnap.toObject(Album::class.java)
+                        var owner = albumData!!.owner
+
+                        if(auth.currentUser!!.email==owner) {
+                            deleteButton.visibility = View.VISIBLE
+                        }
+                    }
+            }
 
 
         deleteButton.setOnClickListener(){

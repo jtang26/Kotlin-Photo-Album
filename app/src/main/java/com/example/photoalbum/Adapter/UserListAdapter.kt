@@ -26,16 +26,29 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     fun bind(event :User, position: Int, albumName: String) {
         var positionPlus = position + 1
         username.text = positionPlus.toString() + ".  " + event.username + ":  "
+
         inviteButton.setOnClickListener() {
             val document = db.collection("albums").document(albumName)
             document.get()
                 .addOnSuccessListener { documentSnapshot ->
                     var data = documentSnapshot.toObject(Album::class.java)
                     var currentUserList = data!!.allowedUserList
+                    var currentUserStats = data!!.allowedUserStatus
+                    var details = "User"
                     if(!currentUserList.contains(event.username.toString())) {
                         currentUserList.add(event.username.toString())
+                        currentUserStats.add(details)
                         val documentUpdate = db.collection("albums").document(albumName)
                         documentUpdate.update("allowedUserList", currentUserList)
+                            .addOnSuccessListener { documentSnapshot ->
+                                Toast.makeText(
+                                    inviteButton.context,
+                                    "Successfully updated!",
+                                    Toast.LENGTH_LONG
+                                )
+                            }
+                        db.collection("albums").document(albumName)
+                            .update("allowedUserStatus", currentUserStats)
                             .addOnSuccessListener { documentSnapshot ->
                                 Toast.makeText(
                                     inviteButton.context,
@@ -47,11 +60,12 @@ class UserListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
                         Toast.makeText(inviteButton.context, "User has already been invited to the album!", Toast.LENGTH_LONG)
                     }
                 }
+            }
 
         }
 
     }
-}
+
 
 
 class UserListAdapter(private val list: MutableList<User>?, private val albumName: String) :

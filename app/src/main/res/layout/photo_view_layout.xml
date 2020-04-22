@@ -34,6 +34,7 @@
         android:layout_marginLeft="68dp"
         android:id="@+id/btn_delete"
         android:text="@string/delete"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -8,29 +8,43 @@
     android:layout_gravity="center_horizontal"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/current_username"
+        android:id="@+id/user_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
         android:text=""
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:id="@+id/user_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_username"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
-        android:text="Mod"
+        android:id="@+id/mod_button"
         android:layout_width="70dp"
         android:layout_height="50dp"
-        android:id="@+id/mod_button" app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/current_username"
+        android:layout_marginTop="10dp"
+        android:text="Mod"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintStart_toEndOf="@+id/user_username"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/demod_button"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="50dp"
         android:text="De-Mod"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mod_button"
@@ -41,6 +55,7 @@
         android:layout_width="70dp"
         android:layout_height="50dp"
         android:text="Ban"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/demod_button"

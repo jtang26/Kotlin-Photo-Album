@@ -14,17 +14,23 @@ data class Album (
     val albumLink: String? = null,
     //Stores userids or usernames that can view album
     val allowedUserList: ArrayList<String> = ArrayList<String>(),
+    val allowedUserStatus: ArrayList<String> = ArrayList<String>(),
     //Stores links to Firebase Storage for each picture
     val comments:ArrayList<Comments> = ArrayList<Comments>(),
     //Stores arraylist of userids or usernames that are mods
-    val isModList: ArrayList<String> = ArrayList<String>(),
+    @field:JvmField val isModList: ArrayList<String> = ArrayList<String>(),
     val owner: String? = null,
     val pictures: ArrayList<String> = ArrayList<String>(),
     //Source for @Field : https://stackoverflow.com/questions/46406376/kotlin-class-does-not-get-its-boolean-value-from-firebase
-    @field:JvmField val isPublic: Boolean? = null
+    @field:JvmField val isPublic: Boolean? = null,
+    val picOwners: ArrayList<String> = ArrayList<String>()
 
 )
 
+//data class UserDetail (
+//    val username: String? = null,
+//    val status: String? = null
+//)
 
 
 

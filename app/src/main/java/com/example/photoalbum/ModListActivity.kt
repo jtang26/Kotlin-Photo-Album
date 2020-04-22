@@ -2,6 +2,7 @@ package com.example.photoalbum
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoalbum.Adapter.ModListAdapter
@@ -15,24 +16,30 @@ import kotlinx.android.synthetic.main.user_list_layout.back_button
 class ModListActivity : AppCompatActivity() {
 
     public lateinit var db: FirebaseFirestore
+    private lateinit var modBackButton: Button
+    private lateinit var allowedUsers: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mod_list_layout)
         val data = intent.extras
-        val username = data!!.getString("username").toString()
+        val albumName = data!!.getString("albumNamed").toString()
         db = FirebaseFirestore.getInstance()
+        modBackButton = mod_back_button
+        allowedUsers = ArrayList<String>()
 
-        val document = db.collection("album").orderBy("allowedUserList", Query.Direction.ASCENDING)
+        val document = db.collection("albums").document(albumName)
         document.get().addOnSuccessListener { documentSnapshot ->
-            var data = documentSnapshot.toObjects(Album::class.java)
-            val adapter = ModListAdapter(data)
+            var dataAlbum = documentSnapshot.toObject(Album::class.java)
+            allowedUsers = dataAlbum!!.allowedUserList
+            val adapter = ModListAdapter(allowedUsers, albumName)
            mod_recycler_view.adapter = adapter
             mod_recycler_view.layoutManager = LinearLayoutManager(this)
         }
 
-        back_button.setOnClickListener() {
-            val intent = Intent(this, MainActivity::class.java)
+        modBackButton.setOnClickListener() {
+            val intent = Intent(this, AlbumViewActivity::class.java)
+            intent.putExtra("name", albumName)
             startActivity(intent)
             finish()
         }

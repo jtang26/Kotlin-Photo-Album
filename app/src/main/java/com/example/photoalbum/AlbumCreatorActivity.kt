@@ -29,6 +29,7 @@ class AlbumCreatorActivity: AppCompatActivity() {
     lateinit var db : FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     lateinit var allowedUserListed: ArrayList<String>
+    lateinit var allowedUserStatus: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,8 @@ class AlbumCreatorActivity: AppCompatActivity() {
         albumDescription = album_description
         albumType = switch1
         createAlbumButton = createButton
-        var allowedUserListed = ArrayList<String>()
+        allowedUserListed = ArrayList<String>()
+        allowedUserStatus = ArrayList<String>()
 
         var typePublic = true
 
@@ -90,8 +92,13 @@ class AlbumCreatorActivity: AppCompatActivity() {
                     .get().addOnSuccessListener { documentSnapshot ->
                         var data = documentSnapshot.toObject(User::class.java)
                         var currentUserUsername = data!!.username
+                        var currentUserDetail = "owner"
+//                        var userdetails = UserDetail(currentUserUsername,currentUserDetail)
                         allowedUserListed.add(currentUserUsername as String)
-                        var newAlbum = Album(albumDesc, albumName, null, allowedUserListed, comments, isModList, owner, pictures, typePublic)
+                        allowedUserStatus.add(currentUserDetail)
+
+                        var picOwners = ArrayList<String>()
+                        var newAlbum = Album(albumDesc, albumName, null, allowedUserListed, allowedUserStatus, comments, isModList, owner, pictures, typePublic, picOwners)
                         db.collection("albums").document(albumName)
                             .set(newAlbum)
 
@@ -104,8 +111,6 @@ class AlbumCreatorActivity: AppCompatActivity() {
                                 Log.d("AlbumCreatorActivity", "Failed to insert data!")
                             })
                     }
-                println("userlist")
-                println(allowedUserListed)
                 //Stores arraylist of userids or usernames that are mods
             }
         }

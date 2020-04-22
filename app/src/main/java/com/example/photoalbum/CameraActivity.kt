@@ -277,6 +277,40 @@ class CameraActivity: AppCompatActivity() {
                                                     .addOnSuccessListener {  Log.d("CameraActivity", "Snapshot succesfully updated!")
                                                         Toast.makeText(applicationContext, "Pictured added to album!", Toast.LENGTH_SHORT).show()}
                                                     .addOnFailureListener { e -> Log.w( "Error updating document", e) }
+
+                                                db.collection("users").document(auth.currentUser!!.uid)
+                                                    .get().addOnSuccessListener { docuSnapshot ->
+                                                        var data1 = docuSnapshot.toObject(User::class.java)
+                                                        var username = data1!!.username
+                                                        db.collection("albums")
+                                                            .document(album.albumName)
+                                                            .get()
+                                                            .addOnSuccessListener { documentSnapshot ->
+                                                                var data =
+                                                                    documentSnapshot.toObject(Album::class.java)
+                                                                var picOwners = data!!.picOwners
+                                                                picOwners.add(username as String)
+                                                                albumRef
+                                                                    .update("picOwners", picOwners)
+                                                                    .addOnSuccessListener {
+                                                                        Log.d(
+                                                                            "CameraActivity",
+                                                                            "Snapshot owner succesfully updated!"
+                                                                        )
+                                                                        Toast.makeText(
+                                                                            applicationContext,
+                                                                            "Picture Owner added to album!",
+                                                                            Toast.LENGTH_SHORT
+                                                                        ).show()
+                                                                    }
+                                                                    .addOnFailureListener { e ->
+                                                                        Log.w(
+                                                                            "Error updating document",
+                                                                            e
+                                                                        )
+                                                                    }
+                                                            }
+                                                    }
                                             }
                                         }
                                     }
