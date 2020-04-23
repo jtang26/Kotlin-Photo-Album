@@ -93,7 +93,16 @@ class AlbumViewActivity:AppCompatActivity() {
         }
 
         backButton.setOnClickListener(){
-            finish()
+            if (album.isPublic==true){
+                val intent = Intent(this, PublicAlbumListActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else{
+                val intent = Intent(this, PrivateAlbumListActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
 
         toModButton.setOnClickListener() {
