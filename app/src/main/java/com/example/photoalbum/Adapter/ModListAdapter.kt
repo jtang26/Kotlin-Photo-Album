@@ -204,6 +204,13 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                                 )
                             }
                         }
+                        else{
+                            Toast.makeText(
+                                modButton.context,
+                                "Mods can't ban album owner!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                     }
             }
