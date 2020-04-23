@@ -161,38 +161,50 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                     }
             }
             banButton.setOnClickListener() {
+                db.collection("users").document(auth.currentUser!!.uid)
+                    .get().addOnSuccessListener { documentSnapshot ->
+                        var dat = documentSnapshot.toObject(User::class.java)
+                        var currUsername = dat!!.username
+
                 val document = db.collection("albums").document(albumName)
                 document.get()
                     .addOnSuccessListener { documentSnapshot ->
                         var data = documentSnapshot.toObject(Album::class.java)
                         var currentUserList = data!!.allowedUserList
                         var currentUserStatus = data!!.allowedUserStatus
-                        if(currentUserList.contains(event.toString())) {
-                            currentUserList.remove(event.toString())
-                            currentUserStatus.removeAt(position)
-                            val documentUpdate = db.collection("albums").document(albumName)
-                            documentUpdate.update("allowedUserList", currentUserList)
-                                .addOnSuccessListener { documentSnapshot ->
-                                    Toast.makeText(
-                                        modButton.context,
-                                        "Successfully banned user!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    notifyDataSetChanged()
-                                }
-                            db.collection("albums").document(albumName)
-                                .update("allowedUserStatus", currentUserStatus)
-                                .addOnSuccessListener { documentSnapshot ->
-                                    Toast.makeText(
-                                        modButton.context,
-                                        "Successfully updated mod list!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    notifyDataSetChanged()
-                                }
-                        }else{
-                            Toast.makeText(modButton.context, "User does not have access to album!", Toast.LENGTH_LONG)
+                        if(event!=currentUserList[0]) {
+                            if (currentUserList.contains(event.toString())) {
+                                currentUserList.remove(event.toString())
+                                currentUserStatus.removeAt(position)
+                                val documentUpdate = db.collection("albums").document(albumName)
+                                documentUpdate.update("allowedUserList", currentUserList)
+                                    .addOnSuccessListener { documentSnapshot ->
+                                        Toast.makeText(
+                                            modButton.context,
+                                            "Successfully banned user!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        notifyDataSetChanged()
+                                    }
+                                db.collection("albums").document(albumName)
+                                    .update("allowedUserStatus", currentUserStatus)
+                                    .addOnSuccessListener { documentSnapshot ->
+                                        Toast.makeText(
+                                            modButton.context,
+                                            "Successfully updated mod list!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        notifyDataSetChanged()
+                                    }
+                            } else {
+                                Toast.makeText(
+                                    modButton.context,
+                                    "User does not have access to album!",
+                                    Toast.LENGTH_LONG
+                                )
+                            }
                         }
+                    }
                     }
             }
 

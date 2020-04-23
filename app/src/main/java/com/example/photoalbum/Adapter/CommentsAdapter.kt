@@ -84,14 +84,15 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                 notifyDataSetChanged()
                                             }
                                     }
+                                    else {
+                                        Toast.makeText(
+                                            deleteButton.context,
+                                            "Comment does not exist in Album!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
                                 }
-                                else {
-                                    Toast.makeText(
-                                        deleteButton.context,
-                                        "Comment does not exist in Album!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
+
                                 if (albumMods.contains(user) && event.commentAuthor!=albumOwner) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
@@ -106,13 +107,8 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                 notifyDataSetChanged()
                                             }
                                     }
-                                }else {
-                                    Toast.makeText(
-                                        deleteButton.context,
-                                        "Mods cannot remove Album Owner's comments!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
                                 }
+
                                 if (!albumMods.contains(user) && event.commentAuthor!=albumOwner && event.commentAuthor==user) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
@@ -129,6 +125,13 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                         notifyDataSetChanged()
                                     }
                                 }
+                                else if(albumMods.contains(user) && event.commentAuthor==albumOwner){
+                                    Toast.makeText(
+                                        deleteButton.context,
+                                        "Mods cannot remove Album Owner's comments!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                                 else {
                                     Toast.makeText(
                                         deleteButton.context,
@@ -136,6 +139,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
+
                             }
 
                     }
