@@ -68,7 +68,8 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                 var data = documentSnapshot.toObject(Album::class.java)
                                 var currentCommentList = data!!.comments
                                 var currentComment = Comments(event.commentBody, event.commentAuthor)
-                                var albumOwner = data!!.allowedUserList[0]
+                                var albumOwner = data!!.owner
+                                var albumOnwerUsername = data!!.allowedUserList[0]
                                 var albumMods = data!!.isModList
                                 if (auth.currentUser!!.email == albumOwner) {
                                     if (currentCommentList.contains(currentComment)) {
@@ -93,7 +94,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                     }
                                 }
 
-                                if (albumMods.contains(user) && event.commentAuthor!=albumOwner) {
+                                if (albumMods.contains(user) && event.commentAuthor!=albumOnwerUsername) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
                                         val documentUpdate = db.collection("albums").document(albumName)
@@ -109,7 +110,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                     }
                                 }
 
-                                if (!albumMods.contains(user) && event.commentAuthor!=albumOwner && event.commentAuthor==user) {
+                                if (!albumMods.contains(user) && event.commentAuthor!=albumOnwerUsername && event.commentAuthor==user) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
                                         val documentUpdate = db.collection("albums").document(albumName)
@@ -125,7 +126,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                         notifyDataSetChanged()
                                     }
                                 }
-                                else if(albumMods.contains(user) && event.commentAuthor==albumOwner){
+                                else if(albumMods.contains(user) && event.commentAuthor==albumOnwerUsername){
                                     Toast.makeText(
                                         deleteButton.context,
                                         "Mods cannot remove Album Owner's comments!",
