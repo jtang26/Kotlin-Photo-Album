@@ -172,7 +172,8 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                         var data = documentSnapshot.toObject(Album::class.java)
                         var currentUserList = data!!.allowedUserList
                         var currentUserStatus = data!!.allowedUserStatus
-                        if(event!=currentUserList[0]) {
+                        var modList = data!!.isModList
+                        if(event!=currentUserList[0] && !modList.contains(event)) {
                             if (currentUserList.contains(event.toString())) {
                                 currentUserList.remove(event.toString())
                                 currentUserStatus.removeAt(position)
@@ -207,7 +208,7 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                         else{
                             Toast.makeText(
                                 modButton.context,
-                                "Mods can't ban album owner!",
+                                "Mods can't ban album owner or other mods!",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
