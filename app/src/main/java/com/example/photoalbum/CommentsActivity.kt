@@ -51,6 +51,8 @@ class CommentsActivity : AppCompatActivity() {
             val adapter = CommentsAdapter(commentList, albumName)
             comment_recycler_view.adapter = adapter
             comment_recycler_view.layoutManager = LinearLayoutManager(this)
+
+
         }
 
         commentBackButton.setOnClickListener() {
@@ -80,6 +82,7 @@ class CommentsActivity : AppCompatActivity() {
                                         "Successfully added comment!",
                                         Toast.LENGTH_LONG
                                     ).show()
+
                                     val intent = Intent(this, CommentsActivity::class.java)
                                     intent.putExtra("albumNamed", albumName)
                                     startActivity(intent)

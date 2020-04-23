@@ -5,10 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.photoalbum.CommentsActivity
@@ -47,6 +44,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
         private val deleteButton: Button
         var db = FirebaseFirestore.getInstance()
         var auth = FirebaseAuth.getInstance()
+
         init {
             commentSpace = itemView.findViewById(R.id.comment_body)
             deleteButton = itemView.findViewById(R.id.comment_delete_button)
@@ -55,6 +53,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
         fun bind(event : Comments, position: Int, albumName: String) {
             var positionPlus = position + 1
             commentSpace.text = positionPlus.toString() + ".  " + event.commentAuthor + ":  " + event.commentBody
+
 
 
             deleteButton.setOnClickListener() {
@@ -94,6 +93,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                     }
                                 }
 
+
                                 if (albumMods.contains(user) && event.commentAuthor!=albumOnwerUsername) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
@@ -123,7 +123,6 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                 ).show()
                                                 notifyDataSetChanged()
                                             }
-                                        notifyDataSetChanged()
                                     }
                                 }
                                 else if(albumMods.contains(user) && event.commentAuthor==albumOnwerUsername){
