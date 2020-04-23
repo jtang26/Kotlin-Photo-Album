@@ -17,7 +17,7 @@ class ModListActivity : AppCompatActivity() {
 
     public lateinit var db: FirebaseFirestore
     private lateinit var modBackButton: Button
-    private lateinit var allowedUsers: ArrayList<String>
+    private var allowedUsers: ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,8 @@ class ModListActivity : AppCompatActivity() {
         val document = db.collection("albums").document(albumName)
         document.get().addOnSuccessListener { documentSnapshot ->
             var dataAlbum = documentSnapshot.toObject(Album::class.java)
-            allowedUsers = dataAlbum!!.allowedUserList
+            println(dataAlbum)
+            allowedUsers = dataAlbum?.allowedUserList
             val adapter = ModListAdapter(allowedUsers, albumName)
            mod_recycler_view.adapter = adapter
             mod_recycler_view.layoutManager = LinearLayoutManager(this)

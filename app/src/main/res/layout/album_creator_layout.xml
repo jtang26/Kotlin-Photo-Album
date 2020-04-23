@@ -47,6 +47,7 @@
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
         android:text="@string/create_button"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
@@ -63,6 +64,7 @@
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
         android:text="@string/public_album"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintTop_toBottomOf="@+id/album_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -72,6 +74,7 @@
         android:layout_width="78dp"
         android:layout_height="50dp"
         android:id="@+id/back_button"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintTop_toBottomOf="@+id/createButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

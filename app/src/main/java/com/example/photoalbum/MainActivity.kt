@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import com.example.photoalbum.Data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,25 +13,32 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var picButton: Button
     private lateinit var createButton: Button
     private lateinit var logoutButton: Button
     private lateinit var publicAlbum: Button
     private lateinit var privateAlbum: Button
     public lateinit var db: FirebaseFirestore
+    private lateinit var mainView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        picButton = btn_camera
         createButton = btn_creator
         logoutButton = btn_logout
         publicAlbum = btn_public_album
         privateAlbum = btn_private_album
+        mainView = main_title_view
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
+        db.collection("users").document(auth.currentUser!!.uid)
+            .get().addOnSuccessListener { documentSnapshot ->
+                var data = documentSnapshot.toObject(User::class.java)
+                var username = data?.username
+                mainView.text = "Welcome: " + username
+            }
 
         if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
@@ -40,11 +48,6 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
         }
 
-        picButton.setOnClickListener(){
-            val intent = Intent(this, CameraActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
         createButton.setOnClickListener(){
             val intent = Intent(this, AlbumCreatorActivity::class.java)
             startActivity(intent)

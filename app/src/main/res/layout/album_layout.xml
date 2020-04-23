@@ -33,6 +33,7 @@
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
         android:visibility="visible"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintTop_toBottomOf="@+id/album_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -48,6 +49,7 @@
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
         android:visibility="visible"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintTop_toBottomOf="@+id/album_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -64,6 +66,7 @@
         android:layout_marginEnd="135dp"
         android:layout_marginRight="135dp"
         android:visibility="visible"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintTop_toBottomOf="@+id/album_title"
         app:layout_constraintStart_toEndOf="@id/btn_userlist"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -73,7 +76,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="600dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         app:layout_constraintTop_toBottomOf="@+id/album_title"
         app:layout_constraintStart_toStartOf = "@+id/album_title"
         android:numColumns = "2"
@@ -85,6 +88,7 @@
         android:layout_marginStart="68dp"
         android:layout_marginLeft="68dp"
         android:text="@string/back"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/grid_view"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -96,9 +100,27 @@
         android:id="@+id/btn_delete"
         android:visibility="invisible"
         android:text="@string/delete"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintStart_toEndOf="@+id/back_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_camera"
+        android:text="Take Picture"
+        android:layout_marginStart="136dp"
+        android:layout_marginLeft="136dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginRight="135dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
+        app:layout_constraintTop_toBottomOf="@+id/btn_userlist"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

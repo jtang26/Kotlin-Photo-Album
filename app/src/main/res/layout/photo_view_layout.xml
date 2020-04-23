@@ -26,6 +26,7 @@
         android:layout_marginLeft="68dp"
         android:id="@+id/btn_back"
         android:text="@string/back"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
     <Button
@@ -34,6 +35,7 @@
         android:layout_marginLeft="68dp"
         android:id="@+id/btn_delete"
         android:text="@string/delete"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"

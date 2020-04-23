@@ -41,6 +41,7 @@ class AlbumViewActivity:AppCompatActivity() {
     private lateinit var toModButton: Button
     lateinit var albumNamed: String
     private lateinit var auth: FirebaseAuth
+    private lateinit var picButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,7 @@ class AlbumViewActivity:AppCompatActivity() {
         commentsButton = btn_comments
         toModButton = to_mod_button
         auth = FirebaseAuth.getInstance()
+        picButton = btn_camera
 
         //set instance of firestore
         db = FirebaseFirestore.getInstance()
@@ -110,6 +112,13 @@ class AlbumViewActivity:AppCompatActivity() {
 
         commentsButton.setOnClickListener() {
             val intent = Intent(this, CommentsActivity::class.java)
+            intent.putExtra("albumNamed", albumNamed)
+            startActivity(intent)
+            finish()
+        }
+
+        picButton.setOnClickListener(){
+            val intent = Intent(this, CameraActivity::class.java)
             intent.putExtra("albumNamed", albumNamed)
             startActivity(intent)
             finish()

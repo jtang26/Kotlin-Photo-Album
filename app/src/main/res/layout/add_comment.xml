@@ -20,6 +20,7 @@
     <Button
         android:text="Delete"
         android:layout_width="78dp"
+        android:backgroundTint="@color/common_google_signin_btn_text_dark"
         android:layout_height="50dp"
         android:visibility="visible"
         android:id="@+id/comment_delete_button" app:layout_constraintTop_toTopOf="parent"
