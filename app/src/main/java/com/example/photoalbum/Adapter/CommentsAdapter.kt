@@ -133,7 +133,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
-                                else {
+                                else if(!albumMods.contains(user) && event.commentAuthor!=user){
                                     Toast.makeText(
                                         deleteButton.context,
                                         "Users cannot remove comments other than their own!",
