@@ -88,6 +88,7 @@ class AlbumViewActivity:AppCompatActivity() {
                 if(thisAlbum[0].isPublic==false) {
                     userListButton.visibility = View.INVISIBLE
                     commentsButton.visibility = View.INVISIBLE
+                    toModButton.visibility = View.INVISIBLE
                 }
             }
         }
