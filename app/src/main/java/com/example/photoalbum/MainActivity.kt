@@ -32,20 +32,19 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
-        db.collection("users").document(auth.currentUser!!.uid)
-            .get().addOnSuccessListener { documentSnapshot ->
-                var data = documentSnapshot.toObject(User::class.java)
-                var username = data?.username
-                mainView.text = "Welcome: " + username
-            }
+        
 
         if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         } else {
-//            Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
+            db.collection("users").document(auth.currentUser!!.uid)
+            .get().addOnSuccessListener { documentSnapshot ->
+                var data = documentSnapshot.toObject(User::class.java)
+                var username = data?.username
+                mainView.text = "Welcome: " + username
+            }
         }
 
         createButton.setOnClickListener(){
