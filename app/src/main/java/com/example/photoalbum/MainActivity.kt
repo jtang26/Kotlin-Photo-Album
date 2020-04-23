@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        
+
 
         if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)

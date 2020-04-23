@@ -79,7 +79,7 @@ class CommentsActivity : AppCompatActivity() {
                                         commentButton.context,
                                         "Successfully added comment!",
                                         Toast.LENGTH_LONG
-                                    )
+                                    ).show()
                                     val intent = Intent(this, CommentsActivity::class.java)
                                     intent.putExtra("albumNamed", albumName)
                                     startActivity(intent)

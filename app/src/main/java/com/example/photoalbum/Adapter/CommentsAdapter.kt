@@ -68,7 +68,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                 var data = documentSnapshot.toObject(Album::class.java)
                                 var currentCommentList = data!!.comments
                                 var currentComment = Comments(event.commentBody, event.commentAuthor)
-                                var albumOwner = data!!.owner
+                                var albumOwner = data!!.allowedUserList[0]
                                 var albumMods = data!!.isModList
                                 if (auth.currentUser!!.email == albumOwner) {
                                     if (currentCommentList.contains(currentComment)) {
@@ -82,15 +82,15 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                     Toast.LENGTH_LONG
                                                 ).show()
                                                 notifyDataSetChanged()
-
                                             }
-                                    } else {
-                                        Toast.makeText(
-                                            deleteButton.context,
-                                            "Comment does not exist in Album!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
                                     }
+                                }
+                                else {
+                                    Toast.makeText(
+                                        deleteButton.context,
+                                        "Comment does not exist in Album!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                                 if (albumMods.contains(user) && event.commentAuthor!=albumOwner) {
                                     if (currentCommentList.contains(currentComment)) {
@@ -105,15 +105,15 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                 ).show()
                                                 notifyDataSetChanged()
                                             }
-                                    } else {
-                                        Toast.makeText(
-                                            deleteButton.context,
-                                            "Mods cannot remove Album Owner's comments!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
                                     }
+                                }else {
+                                    Toast.makeText(
+                                        deleteButton.context,
+                                        "Mods cannot remove Album Owner's comments!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
-                                if (!albumMods.contains(user) && event.commentAuthor!=albumOwner && event.commentAuthor==albumOwner) {
+                                if (!albumMods.contains(user) && event.commentAuthor!=albumOwner && event.commentAuthor==user) {
                                     if (currentCommentList.contains(currentComment)) {
                                         currentCommentList.remove(currentComment)
                                         val documentUpdate = db.collection("albums").document(albumName)
@@ -126,13 +126,15 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                 ).show()
                                                 notifyDataSetChanged()
                                             }
-                                    } else {
-                                        Toast.makeText(
-                                            deleteButton.context,
-                                            "Users cannot remove comments other than their own!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        notifyDataSetChanged()
                                     }
+                                }
+                                else {
+                                    Toast.makeText(
+                                        deleteButton.context,
+                                        "Users cannot remove comments other than their own!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                             }
 
