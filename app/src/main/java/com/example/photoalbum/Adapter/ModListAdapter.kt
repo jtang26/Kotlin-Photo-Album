@@ -1,6 +1,7 @@
 package com.example.photoalbum.Adapter
 
 import android.content.Intent
+import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 
-class ModListAdapter(private val list: MutableList<String>?, private val albumName: String) :
+class ModListAdapter(private var list: MutableList<String>?, private var albumName: String) :
     RecyclerView.Adapter<ModListAdapter.ModListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,7 +33,7 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
 
     //bind the object
     override fun onBindViewHolder(holder: ModListViewHolder, position: Int) {
-        val event: String? = list?.get(position)
+        var event: String? = list?.get(position)
 
         holder.bind(event, position, albumName)
     }
@@ -73,7 +74,6 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                             var albumOwner = data1!!.owner
                             var albumMods = data1!!.isModList
                             var userStats = data1!!.allowedUserStatus
-                            println(albumMods)
                             if(auth.currentUser!!.email == albumOwner) {
                                 modButton.visibility = View.VISIBLE
                                 demodButton.visibility = View.VISIBLE
@@ -82,6 +82,10 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                             if(albumMods.contains(user)) {
                                 banButton.visibility = View.VISIBLE
                             }
+                            println("size of list")
+                            println(list!!.size)
+                            println("position")
+                            println(position)
                             status.text = userStats[position]
                         }
                 }
@@ -89,9 +93,9 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                 val document = db.collection("albums").document(albumName)
                 document.get()
                     .addOnSuccessListener { documentSnapshot ->
-                        var data = documentSnapshot.toObject(Album::class.java)
-                        var currentUserList = data!!.allowedUserList
-                        var modList = data!!.isModList
+                        var data1 = documentSnapshot.toObject(Album::class.java)
+                        var currentUserList = data1!!.allowedUserList
+                        var modList = data1!!.isModList
                         if(!modList.contains(event.toString())) {
                             modList.add(event.toString())
                             val documentUpdate = db.collection("albums").document(albumName)
@@ -104,7 +108,7 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                                     ).show()
                                     notifyDataSetChanged()
                                 }
-                            var currentUserDetail = data.allowedUserStatus
+                            var currentUserDetail = data1.allowedUserStatus
                             currentUserDetail[position] = "mod"
                             db.collection("albums").document(albumName)
                                 .update("allowedUserStatus", currentUserDetail)
@@ -128,10 +132,10 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                 val document = db.collection("albums").document(albumName)
                 document.get()
                     .addOnSuccessListener { documentSnapshot ->
-                        var data = documentSnapshot.toObject(Album::class.java)
-                        var currentUserList = data!!.allowedUserList
-                        var modList = data!!.isModList
-                        var currentUserStatus = data!!.allowedUserStatus
+                        var data1 = documentSnapshot.toObject(Album::class.java)
+                        var currentUserList = data1!!.allowedUserList
+                        var modList = data1!!.isModList
+                        var currentUserStatus = data1!!.allowedUserStatus
                         if(modList.contains(event.toString())) {
                             modList.remove(event.toString())
                             currentUserStatus[position] = "user"
@@ -169,10 +173,10 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                 val document = db.collection("albums").document(albumName)
                 document.get()
                     .addOnSuccessListener { documentSnapshot ->
-                        var data = documentSnapshot.toObject(Album::class.java)
-                        var currentUserList = data!!.allowedUserList
-                        var currentUserStatus = data!!.allowedUserStatus
-                        var modList = data!!.isModList
+                        var data1 = documentSnapshot.toObject(Album::class.java)
+                        var currentUserList = data1!!.allowedUserList
+                        var currentUserStatus = data1!!.allowedUserStatus
+                        var modList = data1!!.isModList
                         if(event!=currentUserList[0] && !modList.contains(event)) {
                             if (currentUserList.contains(event.toString())) {
                                 currentUserList.remove(event.toString())
@@ -185,7 +189,8 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                                             "Successfully banned user!",
                                             Toast.LENGTH_LONG
                                         ).show()
-                                        notifyDataSetChanged()
+                                        list!!.removeAt(position)
+                                        notifyItemRemoved(position)
                                     }
                                 db.collection("albums").document(albumName)
                                     .update("allowedUserStatus", currentUserStatus)
@@ -195,7 +200,7 @@ class ModListAdapter(private val list: MutableList<String>?, private val albumNa
                                             "Successfully updated mod list!",
                                             Toast.LENGTH_LONG
                                         ).show()
-                                        notifyDataSetChanged()
+                                        notifyItemRemoved(position)
                                     }
                             } else {
                                 Toast.makeText(

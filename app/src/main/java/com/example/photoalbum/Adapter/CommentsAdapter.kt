@@ -81,6 +81,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                     "Successfully removed comment!",
                                                     Toast.LENGTH_LONG
                                                 ).show()
+                                                list!!.removeAt(position)
                                                 notifyDataSetChanged()
                                             }
                                     }
@@ -105,6 +106,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                     "Successfully removed comment!",
                                                     Toast.LENGTH_LONG
                                                 ).show()
+                                                list!!.removeAt(position)
                                                 notifyDataSetChanged()
                                             }
                                     }
@@ -121,6 +123,7 @@ class CommentsAdapter(private val list: MutableList<Comments>?, private val albu
                                                     "Successfully removed comment!",
                                                     Toast.LENGTH_LONG
                                                 ).show()
+                                                list!!.removeAt(position)
                                                 notifyDataSetChanged()
                                             }
                                     }
